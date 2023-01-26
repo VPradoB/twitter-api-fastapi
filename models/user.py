@@ -7,7 +7,6 @@ from pydantic import EmailStr
 
 
 class UserBase(BaseModel):
-    id: UUID = Field(...)
     email: EmailStr = Field(...)
 
 
@@ -16,6 +15,7 @@ class UserLogin(UserBase):
 
 
 class User(UserBase):
+    id: UUID = Field(...)
     first_name: str = Field(..., min_length=1, max_length=50)
     last_name: str = Field(..., min_length=1, max_length=50)
     birthday: Optional[date] = Field(default=None)

@@ -10,5 +10,5 @@ class Tweet(BaseModel):
     id: UUID = Field(...)
     content: str = Field(..., min_length=1, max_length=256)
     by: User = Field(...)
-    created_at: datetime = Field(..., default=datetime.now())
-    updated_at: datetime = Field(..., default=datetime.now())
+    created_at: datetime = Field(default=datetime.now())
+    updated_at: datetime = Field(default=datetime.now())
