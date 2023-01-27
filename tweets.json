@@ -1,0 +1,38 @@
+﻿[
+    {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "string",
+        "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "created_at": "2023-01-26 22:34:33.536498",
+        "updated_at": "2023-01-26 22:34:33.536510"
+    },
+    {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        "content": "string",
+        "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "created_at": "2023-01-26 22:36:55.852385",
+        "updated_at": "2023-01-26 22:36:55.852397",
+        "user": {
+            "email": "vmpra@example.com",
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "first_name": "string",
+            "last_name": "string",
+            "birthdate": "2023-01-26",
+            "password": "stringst"
+        }
+    },
+    {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+        "content": "string",
+        "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "created_at": "2023-01-26 22:38:28.168171",
+        "updated_at": "2023-01-26 22:38:28.168181"
+    },
+    {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa0",
+        "content": "string",
+        "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "created_at": "2023-01-26 22:39:05.017619",
+        "updated_at": "2023-01-26 22:39:05.017629"
+    }
+]
