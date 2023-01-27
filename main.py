@@ -15,7 +15,12 @@ app = FastAPI()
 # Authorization ep
 @app.post(path="/signin", response_model=User, status_code=status.HTTP_200_OK, tags=['Authorization'])
 def signin(user: UserLogin):
-    pass
+    with open('users.json', 'r', encoding='utf-8-sig') as f:
+        users = json.load(f)
+        for u in users:
+            if u['email'] == user.email and u['password'] == user.password:
+                return u
+            return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
 
 @app.post(path="/signup", response_model=User, status_code=status.HTTP_201_CREATED, tags=['Authorization'])
@@ -75,12 +80,47 @@ def show_user(user_id: UUID):
 
 @app.delete(path="/users/{user_id}", response_model=User, status_code=status.HTTP_200_OK, tags=['User'])
 def delete_user(user_id: UUID):
-    pass
+    """
+    Delete one user by id
+
+    :param user_id:
+
+    :return:
+        User
+    """
+    with open('users.json', 'r+', encoding='utf-8-sig') as f:
+        users = json.load(f)
+        for user in users:
+            if user['id'] == str(user_id):
+                users.remove(user)
+                f.seek(0)
+                json.dump(users, f, indent=4)
+                f.truncate()
+                return user
 
 
 @app.put(path="/users/{user_id}", response_model=User, status_code=status.HTTP_200_OK, tags=['User'])
-def index_user(user_id: UUID):
-    pass
+def update_user(user_id: UUID, user: UserRegister = Body(...)):
+    """
+    Update one user by id
+
+    :param user:
+    :param user_id:
+
+    :return:
+        User
+    """
+    with open('users.json', 'r+', encoding='utf-8-sig') as f:
+        users = json.load(f)
+        for u in users:
+            if u['id'] == str(user_id):
+                u['first_name'] = user.first_name
+                u['last_name'] = user.last_name
+                u['birthdate'] = str(user.birthdate)
+                f.seek(0)
+                json.dump(users, f, indent=4)
+                f.truncate()
+                return u
 
 
 # Tweet endpoints
@@ -97,14 +137,13 @@ def home():
         return tweets
 
 
-@app.get(path="/tweets", response_model=List[Tweet], status_code=status.HTTP_200_OK, tags=['Tweet'])
-def index_tweet():
-    pass
-
-
 @app.get(path="/tweets/{tweet_id}", response_model=Tweet, status_code=status.HTTP_200_OK, tags=['Tweet'])
 def show_tweet(tweet_id: UUID):
-    pass
+    with open('tweets.json', 'r', encoding='utf-8-sig') as f:
+        tweets = json.load(f)
+        for tweet in tweets:
+            if tweet['id'] == str(tweet_id):
+                return tweet
 
 
 @app.post(
@@ -141,10 +180,37 @@ def store_tweets(tweet: TweetCreate = Body(...)):
 
 
 @app.put(path="/tweets/{tweet_id}", response_model=Tweet, status_code=status.HTTP_200_OK, tags=['Tweet'])
-def index_tweet(tweet_id: UUID):
-    pass
+def update_tweet(tweet_id: UUID):
+    """
+    :param tweet_id:
+    :return:
+        Tweet
+    """
+    with(open('tweets.json', 'r+', encoding='utf-8-sig')) as f:
+        tweets = json.load(f)
+        for tweet in tweets:
+            if tweet['id'] == str(tweet_id):
+                tweet['content'] = 'Updated content'
+                tweet['updated_at'] = str(datetime.now())
+                f.seek(0)
+                json.dump(tweets, f, indent=4)
+                f.truncate()
+                return tweet
 
 
 @app.delete(path="/tweets/{tweet_id}", response_model=Tweet, status_code=status.HTTP_200_OK, tags=['Tweet'])
 def delete_tweet(tweet_id: UUID):
-    pass
+    """
+    :param tweet_id:
+    :return:
+        Tweet
+    """
+    with(open('tweets.json', 'r+', encoding='utf-8-sig')) as f:
+        tweets = json.load(f)
+        for tweet in tweets:
+            if tweet['id'] == str(tweet_id):
+                tweets.remove(tweet)
+                f.seek(0)
+                json.dump(tweets, f, indent=4)
+                f.truncate()
+                return tweet
