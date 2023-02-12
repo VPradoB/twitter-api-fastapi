@@ -3,12 +3,12 @@ from datetime import datetime
 from typing import Optional, List
 from uuid import UUID
 
-from src.shared.domain.model import need_attribute, IModel
+from src.shared.domain.entity import IEntity
 from src.shared.domain.repositories import IRepository
 from src.shared.domain.services import IUserService
 
 
-class Tweet(IModel):
+class TweetEntity(IEntity):
     def __init__(self,
                  user_id,
                  content: str,
@@ -21,12 +21,12 @@ class Tweet(IModel):
                  updated_at: datetime = datetime.now(),
                  user_service: Optional[IUserService] = None,
                  repository: Optional['ITweetRepository'] = None,
-                 tweet_quoted_id: Optional['Tweet'] = None,
+                 tweet_quoted_id: Optional['TweetEntity'] = None,
                  user=None,
-                 tweet_quoted: Optional['Tweet'] = None,
-                 tweets_quoted_me: Optional[List['Tweet']] = None,
+                 tweet_quoted: Optional['TweetEntity'] = None,
+                 tweets_quoted_me: Optional[List['TweetEntity']] = None,
                  ):
-        """Tweet constructor."""
+        """TweetEntity constructor."""
         self.id = tweet_id
         self.content = content
         self.likes = likes
@@ -36,7 +36,7 @@ class Tweet(IModel):
 
         self.tweet_quoted_id = tweet_quoted_id
         if user_id is None:
-            raise ValueError('User id is required')
+            raise ValueError('UserEntity id is required')
         self.user_id = user_id
 
         self.user = user
@@ -50,21 +50,17 @@ class Tweet(IModel):
         self.repository = repository
         self.tweet_quoted_id = tweet_quoted_id
 
-    @need_attribute('user_service')
     def get_user(self):
         return self.user_service.get(self.user_id)
 
-    @need_attribute('repository')
     def save(self):
         self.repository.save(self)
 
-    @need_attribute('repository')
-    def get_quoted_tweet(self) -> Optional['Tweet']:
+    def get_quoted_tweet(self) -> Optional['TweetEntity']:
         self.tweet_quoted = self.repository.get(self.tweet_quoted_id)
         return self.tweet_quoted
 
-    @need_attribute('repository')
-    def get_tweet_quoted_me(self) -> Optional[List['Tweet']]:
+    def get_tweet_quoted_me(self) -> Optional[List['TweetEntity']]:
         self.tweets_quoted_me = self.repository.get_by_tweet_quoted_id(self.id)
         return self.tweets_quoted_me
 

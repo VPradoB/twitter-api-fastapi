@@ -1,8 +1,8 @@
-from src.users.domain.user import IUserRepository
+from src.users.domain.user_entity import IUserRepository
 
 
-class UserRepository(IUserRepository):
-    """User repository."""
+class SqliteUserRepository(IUserRepository):
+    """UserEntity repository."""
 
     def get_following(self, user_id):
         pass
@@ -17,9 +17,6 @@ class UserRepository(IUserRepository):
         pass
 
     def get_by_email(self, email):
-        pass
-
-    def __init__(self):
         pass
 
     def save(self, user):

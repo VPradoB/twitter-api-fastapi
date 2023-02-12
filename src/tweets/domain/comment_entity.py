@@ -3,12 +3,12 @@ from datetime import datetime
 from typing import Optional, List
 from uuid import UUID
 
-from src.shared.domain.model import IModel
+from src.shared.domain.entity import IEntity
 from src.shared.domain.repositories import IRepository
 from src.shared.domain.services import IUserService, ITweetService
 
 
-class Comment(IModel):
+class CommentEntity(IEntity):
     def __init__(self,
                  content: str,
                  user_id,
@@ -17,15 +17,15 @@ class Comment(IModel):
                  reply_to_id: Optional[UUID] = None,
                  user=None,
                  tweet=None,
-                 replies_to_me: Optional[List['Comment']] = None,
-                 reply_to: Optional['Comment'] = None,
+                 replies_to_me: Optional[List['CommentEntity']] = None,
+                 reply_to: Optional['CommentEntity'] = None,
                  repository: Optional['ICommentRepository'] = None,
                  user_service: Optional[IUserService] = None,
                  tweet_service: Optional[ITweetService] = None,
                  created_at: datetime = datetime.now(),
                  updated_at: datetime = datetime.now(),
                  ):
-        """Comment constructor."""
+        """CommentEntity constructor."""
         self.id = comment_id
         self.content = content
         self.tweet_id = tweet_id
@@ -68,9 +68,9 @@ class ICommentRepository(IRepository):
     """Abstract class for comment repositories."""
 
     @abc.abstractmethod
-    def get_by_user_id(self, user_id) -> Optional[List[Comment]]:
+    def get_by_user_id(self, user_id) -> Optional[List[CommentEntity]]:
         pass
 
     @abc.abstractmethod
-    def get_by_reply_to(self, comment_id) -> Optional[List[Comment]]:
+    def get_by_reply_to(self, comment_id) -> Optional[List[CommentEntity]]:
         pass

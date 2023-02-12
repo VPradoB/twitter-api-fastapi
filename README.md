@@ -11,6 +11,7 @@ A Twitter clone built with Domain-Driven Design (DDD) and Clean Architecture pri
 - FastAPI for the web framework
 - SQLite as the database
 - DDD and Clean Architecture for software design
+- SQLAlchemy as the ORM
 
 ## Prerequisites
 - Python 3.6+

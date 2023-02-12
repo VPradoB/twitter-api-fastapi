@@ -16,12 +16,12 @@ class ProfileUserDto(BaseUserDto):
     """Profile DTO."""
     email: EmailStr = Field(...)
     birthdate: datetime = Field(...)
-    message: Optional[str] = Field(default=None)
+    profile_description: Optional[str] = Field(default=None)
     profile_name: str = Field(..., min_length=4, max_length=20)
 
 
 class UserDto(ProfileUserDto):
-    """User DTO."""
+    """UserEntity DTO."""
     id: UUID = Field(...)
     followers_count: int = Field(...)
     following_count: int = Field(...)
