@@ -1,6 +1,4 @@
 import abc
-import logging
-import os
 from dataclasses import dataclass, field
 import uuid
 from datetime import datetime
@@ -30,25 +28,28 @@ class IUserRepository(IRepository):
     def get_profile_picture(self, user_id):
         pass
 
+    @abc.abstractmethod
     def find_by_email(self, email):
         pass
 
+    @abc.abstractmethod
     def find_by_id(self, id):
         pass
 
+    @abc.abstractmethod
     def find_by_username(self, username):
         pass
 
 
 @dataclass(slots=True)  # using slots to improve performance, but it's not compatible with inheritance
 class UserEntity(IEntity):
-    """UserEntity model."""
+    """User Entity."""
 
     email: str
     username: str
     profile_name: str
     hashed_password: str
-    id: UUID = field(default_factory=uuid.uuid4)
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
     profile_description: str = field(default='', repr=False)
     followers_count: int = 0
     following_count: int = 0
