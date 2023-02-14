@@ -22,7 +22,7 @@ class ProfileUserDto(BaseUserDto):
 
 class UserDto(ProfileUserDto):
     """UserEntity DTO."""
-    id: UUID = Field(...)
+    id: str = Field(...)
     followers_count: int = Field(...)
     following_count: int = Field(...)
     tweet_count: int = Field(...)

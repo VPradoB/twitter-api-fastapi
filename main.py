@@ -1,19 +1,33 @@
+import glob
+import importlib
 import os
-from src.shared.infrastructure.logger import configure_logger
+
+from src.shared.infrastructure.logs import configure_logger
+from src.shared.infrastructure.database import Database
 from fastapi import FastAPI
 
 app = FastAPI()
+
+# the logger is configured here
 configure_logger(
     logger_name=os.getenv('LOGGER_NAME'),
     logger_host=os.getenv('LOGGER_HOST'),
     logger_port=int(os.getenv('LOGGER_PORT'))
 )
 
+Database.create_database_sqlite(
+    database_path=os.getenv('DATABASE_PATH', '.'),
+    database_name=os.getenv('DATABASE_NAME', 'database.sqlite')
+)
+
+
 # This  is used to load all the routers from the src folder
-for filename in os.listdir('src'):
-    if filename != '__pycache__' and filename != 'shared':
-        app.include_router(
-            __import__(f'src.{filename}.infrastructure.router',
-                       fromlist=['router']).router,
-            prefix=f'/{filename}'
-        )
+def include_routers():
+    path = 'src/*/infrastructure/router.py'
+    for filename in glob.glob(path):
+        module = filename.replace('/', '.')[:-3]
+        router = importlib.import_module(module)
+        app.include_router(router.router, prefix=f'/{module.split(".")[1]}')
+
+
+include_routers()
