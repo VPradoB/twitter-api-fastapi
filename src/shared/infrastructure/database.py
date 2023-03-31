@@ -1,11 +1,11 @@
 import glob
 import importlib
+import logging
 import os
 
-from src.users.infrastructure.database.user_table import create_table
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker, Session
-import logging
+from sqlalchemy.orm import sessionmaker
+
 
 logger = logging.getLogger(os.getenv('LOGGER_NAME'))
 
@@ -23,7 +23,7 @@ class Database:
         cls.metadata = MetaData()
         cls.session = sessionmaker(autocommit=False, autoflush=False, bind=cls.engine)()
 
-        create_table(cls.metadata)
+        cls.create_tables(cls.metadata)
         cls.metadata.create_all(cls.engine)
 
     @staticmethod
@@ -32,4 +32,4 @@ class Database:
         for filename in glob.glob(path):
             module = filename.replace('/', '.')[:-3]
             table = importlib.import_module(module)
-            table.create_table(metadata)
+            table.define_table(metadata)

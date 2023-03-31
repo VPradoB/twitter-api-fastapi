@@ -2,6 +2,8 @@ import glob
 import importlib
 import os
 
+import uvicorn
+
 from src.shared.infrastructure.logs import configure_logger
 from src.shared.infrastructure.database import Database
 from fastapi import FastAPI
@@ -22,7 +24,7 @@ Database.create_database_sqlite(
 
 
 # This  is used to load all the routers from the src folder
-def include_routers():
+def include_routers(app: FastAPI):
     path = 'src/*/infrastructure/router.py'
     for filename in glob.glob(path):
         module = filename.replace('/', '.')[:-3]
@@ -30,4 +32,8 @@ def include_routers():
         app.include_router(router.router, prefix=f'/{module.split(".")[1]}')
 
 
-include_routers()
+include_routers(app)
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

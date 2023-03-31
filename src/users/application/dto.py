@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import Optional
-from uuid import UUID
 
 from pydantic import Field, EmailStr, BaseModel
 
 
 class BaseUserDto(BaseModel):
     username: str = Field(..., min_length=4, max_length=20)
+
 
 class LoginUserDto(BaseUserDto):
     password: str = Field(..., min_length=8, max_length=20)

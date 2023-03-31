@@ -1,8 +1,8 @@
 import abc
-from dataclasses import dataclass, field
 import uuid
+from dataclasses import dataclass, field
 from datetime import datetime
-from uuid import UUID
+from typing import List, Union
 
 from src.shared.domain.entity import IEntity
 from src.shared.domain.repositories import IRepository
@@ -21,7 +21,7 @@ class IUserRepository(IRepository):
         pass
 
     @abc.abstractmethod
-    def get_following(self, user_id):
+    def get_followed(self, user_id):
         pass
 
     @abc.abstractmethod
@@ -29,15 +29,15 @@ class IUserRepository(IRepository):
         pass
 
     @abc.abstractmethod
-    def find_by_email(self, email):
+    def get_by_id(self, id):
         pass
 
     @abc.abstractmethod
-    def find_by_id(self, id):
+    def get_all(self):
         pass
 
     @abc.abstractmethod
-    def find_by_username(self, username):
+    def follow(self, follower_id: str, followed_id: str):
         pass
 
 
@@ -53,6 +53,8 @@ class UserEntity(IEntity):
     profile_description: str = field(default='', repr=False)
     followers_count: int = 0
     following_count: int = 0
+    followers: List['UserEntity'] = field(default_factory=list, repr=False)
+    followed: List['UserEntity'] = field(default_factory=list, repr=False)
     tweet_count: int = 0
     profile_picture: str = field(default='', repr=False)
     birthdate: datetime | None = None
@@ -71,10 +73,6 @@ class UserEntity(IEntity):
         """Verify if there is no other user with the same email. If there is, raise an exception"""
         return self.email
 
-    @staticmethod
-    def hash_password(password) -> str:
-        return password
-
     def get_tweets(self):
         return self.tweet_service.get_by_user_id(self.id)
 
@@ -90,6 +88,55 @@ class UserEntity(IEntity):
     def save(self):
         return self.repository.save(self)
 
+    def follow(self, user: Union['UserEntity', str]) -> 'UserEntity':
+        """Follows a user.
+            Args:
+                user (UserEntity | str): User to follow
+        """
+        if user == self or user.id == self.id:
+            raise ValueError('You cannot follow yourself')
+
+        user = user if isinstance(user, UserEntity) else self.repository.get_by_id(user)
+        self.followed.append(user)
+        return self.repository.follow(self.id, user.id)
+
+    def unfollow(self, user: Union['UserEntity', str]) -> 'UserEntity':
+        """Unfollows a user.
+            Args:
+                user (UserEntity | str): User to unfollow
+        """
+        if user == self or user.id == self.id:
+            raise ValueError('You cannot unfollow yourself')
+
+        user = user.id if isinstance(user, UserEntity) else user
+        self.followed.remove(user)
+        return self.repository.save(self)
+
+    def is_following(self, user: Union['UserEntity', str]) -> bool:
+        """Checks if the user is following another user.
+            Args:
+                user (UserEntity | str): User to check
+        """
+        user = user.id if isinstance(user, UserEntity) else user
+        return user in self.followed
+
+    def is_followed_by(self, user: Union['UserEntity', str]) -> bool:
+        """Checks if the user is followed by another user.
+            Args:
+                user (UserEntity | str): User to check
+        """
+        user = user.id if isinstance(user, UserEntity) else user
+        return user in self.followers
+
+    def toggle_follow(self, user: Union['UserEntity', str]) -> 'UserEntity':
+        """Toggles follow/unfollow a user.
+            Args:
+                user (UserEntity | str): User to toggle follow
+        """
+        if self.is_following(user):
+            return self.unfollow(user)
+        return self.follow(user)
+
     def without_password(self):
         return {k: v for k, v in vars(self).items() if k != 'password'}
 
@@ -101,7 +148,7 @@ class UserEntity(IEntity):
             email=email,
             profile_name=profile_name,
             birthdate=birthdate,
-            hashed_password=cls.hash_password(password),
+            hashed_password=password,
             profile_description=profile_description,
             repository=repository,
         )

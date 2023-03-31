@@ -12,6 +12,7 @@ class IUserService(abc.ABC):
     def save(self, entity):
         pass
 
+
 class ITweetService(abc.ABC):
     """Abstract class for tweet services."""
 
