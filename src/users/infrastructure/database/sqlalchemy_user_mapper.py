@@ -1,5 +1,5 @@
 from src.users.domain.user_entity import UserEntity, IUserRepository
-from src.users.infrastructure.database.user_table import User as UserInDB
+from src.users.infrastructure.database.user_table import UserInDB
 
 
 class UserMapper:

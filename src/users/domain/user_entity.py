@@ -43,7 +43,7 @@ class IUserRepository(IRepository):
 
 @dataclass(slots=True)  # using slots to improve performance, but it's not compatible with inheritance
 class UserEntity(IEntity):
-    """User Entity."""
+    """UserInDB Entity."""
 
     email: str
     username: str
@@ -87,7 +87,7 @@ class UserEntity(IEntity):
     def follow(self, user: Union['UserEntity', str]) -> 'UserEntity':
         """Follows a user.
             Args:
-                user (UserEntity | str): User to follow
+                user (UserEntity | str): UserInDB to follow
         """
         if user == self or user.id == self.id:
             raise ValueError('You cannot follow yourself')
@@ -99,7 +99,7 @@ class UserEntity(IEntity):
     def unfollow(self, user: Union['UserEntity', str]) -> 'UserEntity':
         """Unfollows a user.
             Args:
-                user (UserEntity | str): User to unfollow
+                user (UserEntity | str): UserInDB to unfollow
         """
         if user == self or user.id == self.id:
             raise ValueError('You cannot unfollow yourself')
@@ -111,7 +111,7 @@ class UserEntity(IEntity):
     def is_following(self, user: Union['UserEntity', str]) -> bool:
         """Checks if the user is following another user.
             Args:
-                user (UserEntity | str): User to check
+                user (UserEntity | str): UserInDB to check
         """
         user = user.id if isinstance(user, UserEntity) else user
         return user in self.followed
@@ -119,7 +119,7 @@ class UserEntity(IEntity):
     def is_followed_by(self, user: Union['UserEntity', str]) -> bool:
         """Checks if the user is followed by another user.
             Args:
-                user (UserEntity | str): User to check
+                user (UserEntity | str): UserInDB to check
         """
         user = user.id if isinstance(user, UserEntity) else user
         return user in self.followers
@@ -127,7 +127,7 @@ class UserEntity(IEntity):
     def toggle_follow(self, user: Union['UserEntity', str]) -> 'UserEntity':
         """Toggles follow/unfollow a user.
             Args:
-                user (UserEntity | str): User to toggle follow
+                user (UserEntity | str): UserInDB to toggle follow
         """
         if self.is_following(user):
             return self.unfollow(user)

@@ -16,7 +16,7 @@ class SignInUserUserCase:
         """Register a new user."""
         try:
             user: UserEntity = UserEntity.register(**new_user.__dict__, repository=self.user_repository)
-            logger.info(f'User {user.username} registered successfully.')
+            logger.info(f'UserInDB {user.username} registered successfully.')
             return user
         except Exception as e:
             logger.error(f'Error registering user: {e}')

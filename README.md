@@ -2,7 +2,7 @@
 A Twitter clone built with Domain-Driven Design (DDD) and Clean Architecture principles, using FastAPI and SQLite as the database.
 
 ## Future Features
-- User registration and login
+- UserInDB registration and login
 - Creating and managing tweets
 - Following and unfollowing users
 - Viewing tweets from followed users in a timeline
