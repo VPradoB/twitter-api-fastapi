@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 from pydantic import Field, EmailStr, BaseModel
 
@@ -22,7 +23,7 @@ class ProfileUserDto(BaseUserDto):
 
 class UserDto(ProfileUserDto):
     """UserEntity DTO."""
-    id: str = Field(...)
+    id: UUID = Field(...)
     followers_count: int = Field(...)
     following_count: int = Field(...)
     tweet_count: int = Field(...)

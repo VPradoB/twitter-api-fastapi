@@ -49,7 +49,7 @@ class UserEntity(IEntity):
     username: str
     profile_name: str
     hashed_password: str
-    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
     profile_description: str = field(default='', repr=False)
     followers_count: int = 0
     following_count: int = 0
@@ -63,7 +63,6 @@ class UserEntity(IEntity):
     updated_at: datetime = field(default_factory=datetime.now, repr=False)
 
     repository: IUserRepository | None = None
-    tweet_service: ITweetService | None = None
 
     def verify_username_availability(self) -> str:
         """Verify if there is no other user with the same username. If there is, raise an exception"""
@@ -72,9 +71,6 @@ class UserEntity(IEntity):
     def verify_email_availability(self) -> str:
         """Verify if there is no other user with the same email. If there is, raise an exception"""
         return self.email
-
-    def get_tweets(self):
-        return self.tweet_service.get_by_user_id(self.id)
 
     def get_followers(self):
         return self.repository.get_followers(self.id)

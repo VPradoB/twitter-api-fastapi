@@ -4,7 +4,7 @@ from src.users.application.dto import RegisterUserDto, UserDto
 from src.users.application.follow_user import FollowUserUserCase
 from src.users.application.list_users import ListUsersUseCase
 from src.users.application.signup_user import SignInUserUserCase
-from src.users.infrastructure.database.repositories.sqlalchemy_user_repository import SqlAlchemyUserRepository
+from src.users.infrastructure.database.sqlalchemy_user_repository import SqlAlchemyUserRepository
 
 router = APIRouter()
 router.tags = ['Users']

@@ -18,9 +18,8 @@ configure_logger(
 )
 
 Database.create_database_sqlite(
-    database_path=os.getenv('DATABASE_PATH', '.'),
-    database_name=os.getenv('DATABASE_NAME', 'database.sqlite')
-)
+    database_url=f'sqlite:///{os.getenv("DATABASE_URL")}'
+    )
 
 
 # This  is used to load all the routers from the src folder
