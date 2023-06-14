@@ -1,6 +1,7 @@
 import glob
 import importlib
 import os
+from dotenv import load_dotenv
 
 import uvicorn
 
@@ -8,6 +9,7 @@ from src.shared.infrastructure.logs import configure_logger
 from src.shared.infrastructure.database import Database
 from fastapi import FastAPI
 
+load_dotenv()
 app = FastAPI()
 
 # the logger is configured here
@@ -26,7 +28,7 @@ Database.create_database_sqlite(
 def include_routers(app: FastAPI):
     path = 'src/*/infrastructure/router.py'
     for filename in glob.glob(path):
-        module = filename.replace('/', '.')[:-3]
+        module = filename.replace('/', '.').replace('\\', '.')[:-3]
         router = importlib.import_module(module)
         app.include_router(router.router, prefix=f'/{module.split(".")[1]}')
 

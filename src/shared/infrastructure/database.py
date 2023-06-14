@@ -27,5 +27,5 @@ class Database:
     def import_tables_module():
         path = 'src/*/infrastructure/database/*_table.py'
         for filename in glob.glob(path):
-            module = filename.replace('/', '.')[:-3]
+            module = filename.replace('/', '.').replace('\\', '.')[:-3]
             table = importlib.import_module(module)

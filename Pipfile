@@ -9,6 +9,7 @@ uvicorn = "*"
 pydantic = {extras = ["email"], version = "*"}
 pyjwt = "*"
 sqlalchemy = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
