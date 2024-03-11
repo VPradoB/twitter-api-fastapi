@@ -25,8 +25,8 @@ class UserMapper:
         return UserInDB(
             id=user.id,
             email=user.email,
-            followers_count = user.followers_count,
-            following_count = user.following_count,
+            followers_count=user.followers_count,
+            following_count=user.following_count,
             username=user.username,
             profile_name=user.profile_name,
             hashed_password=user.hashed_password,

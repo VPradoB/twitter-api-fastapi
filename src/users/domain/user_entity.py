@@ -41,7 +41,9 @@ class IUserRepository(IRepository):
         pass
 
 
-@dataclass(slots=True)  # using slots to improve performance, but it's not compatible with inheritance
+@dataclass(
+    slots=True
+)  # using slots to improve performance, but it's not compatible with inheritance
 class UserEntity(IEntity):
     """UserInDB Entity."""
 
@@ -50,13 +52,13 @@ class UserEntity(IEntity):
     profile_name: str
     hashed_password: str
     id: uuid.UUID = field(default_factory=uuid.uuid4)
-    profile_description: str = field(default='', repr=False)
+    profile_description: str = field(default="", repr=False)
     followers_count: int = 0
     following_count: int = 0
-    followers: List['UserEntity'] = field(default_factory=list, repr=False)
-    followed: List['UserEntity'] = field(default_factory=list, repr=False)
+    followers: List["UserEntity"] = field(default_factory=list, repr=False)
+    followed: List["UserEntity"] = field(default_factory=list, repr=False)
     tweet_count: int = 0
-    profile_picture: str = field(default='', repr=False)
+    profile_picture: str = field(default="", repr=False)
     birthdate: datetime | None = None
 
     created_at: datetime = field(default_factory=datetime.now, repr=False)
@@ -84,61 +86,69 @@ class UserEntity(IEntity):
     def save(self):
         return self.repository.save(self)
 
-    def follow(self, user: Union['UserEntity', str]) -> 'UserEntity':
+    def follow(self, user: Union["UserEntity", str]) -> "UserEntity":
         """Follows a user.
-            Args:
-                user (UserEntity | str): UserInDB to follow
+        Args:
+            user (UserEntity | str): UserInDB to follow
         """
         if user == self or user.id == self.id:
-            raise ValueError('You cannot follow yourself')
+            raise ValueError("You cannot follow yourself")
 
         user = user if isinstance(user, UserEntity) else self.repository.get_by_id(user)
         self.followed.append(user)
         return self.repository.follow(self.id, user.id)
 
-    def unfollow(self, user: Union['UserEntity', str]) -> 'UserEntity':
+    def unfollow(self, user: Union["UserEntity", str]) -> "UserEntity":
         """Unfollows a user.
-            Args:
-                user (UserEntity | str): UserInDB to unfollow
+        Args:
+            user (UserEntity | str): UserInDB to unfollow
         """
         if user == self or user.id == self.id:
-            raise ValueError('You cannot unfollow yourself')
+            raise ValueError("You cannot unfollow yourself")
 
         user = user.id if isinstance(user, UserEntity) else user
         self.followed.remove(user)
         return self.repository.save(self)
 
-    def is_following(self, user: Union['UserEntity', str]) -> bool:
+    def is_following(self, user: Union["UserEntity", str]) -> bool:
         """Checks if the user is following another user.
-            Args:
-                user (UserEntity | str): UserInDB to check
+        Args:
+            user (UserEntity | str): UserInDB to check
         """
         user = user.id if isinstance(user, UserEntity) else user
         return user in self.followed
 
-    def is_followed_by(self, user: Union['UserEntity', str]) -> bool:
+    def is_followed_by(self, user: Union["UserEntity", str]) -> bool:
         """Checks if the user is followed by another user.
-            Args:
-                user (UserEntity | str): UserInDB to check
+        Args:
+            user (UserEntity | str): UserInDB to check
         """
         user = user.id if isinstance(user, UserEntity) else user
         return user in self.followers
 
-    def toggle_follow(self, user: Union['UserEntity', str]) -> 'UserEntity':
+    def toggle_follow(self, user: Union["UserEntity", str]) -> "UserEntity":
         """Toggles follow/unfollow a user.
-            Args:
-                user (UserEntity | str): UserInDB to toggle follow
+        Args:
+            user (UserEntity | str): UserInDB to toggle follow
         """
         if self.is_following(user):
             return self.unfollow(user)
         return self.follow(user)
 
     def without_password(self):
-        return {k: v for k, v in vars(self).items() if k != 'password'}
+        return {k: v for k, v in vars(self).items() if k != "password"}
 
     @classmethod
-    def register(cls, username, email, profile_name, birthdate, password, repository,
-                 profile_description='') -> 'UserEntity':
+    def register(
+        cls,
+        username,
+        email,
+        profile_name,
+        birthdate,
+        password,
+        repository,
+        profile_description="",
+    ) -> "UserEntity":
         user = cls(
             username=username,
             email=email,

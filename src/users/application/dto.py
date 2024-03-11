@@ -15,6 +15,7 @@ class LoginUserDto(BaseUserDto):
 
 class ProfileUserDto(BaseUserDto):
     """Profile DTO."""
+
     email: EmailStr = Field(...)
     birthdate: datetime = Field(...)
     profile_description: Optional[str] = Field(default=None)
@@ -23,11 +24,12 @@ class ProfileUserDto(BaseUserDto):
 
 class UserDto(ProfileUserDto):
     """UserEntity DTO."""
+
     id: UUID = Field(...)
     followers_count: int = Field(...)
     following_count: int = Field(...)
     tweet_count: int = Field(...)
-    profile_picture: Optional[str] = Field(default='')
+    profile_picture: Optional[str] = Field(default="")
     created_at: datetime = Field(default=datetime.now())
     updated_at: datetime = Field(default=datetime.now())
 

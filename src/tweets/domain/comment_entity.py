@@ -9,22 +9,23 @@ from src.shared.domain.services import IUserService, ITweetService
 
 
 class CommentEntity(IEntity):
-    def __init__(self,
-                 content: str,
-                 user_id,
-                 tweet_id: UUID,
-                 comment_id: UUID = UUID(),
-                 reply_to_id: Optional[UUID] = None,
-                 user=None,
-                 tweet=None,
-                 replies_to_me: Optional[List['CommentEntity']] = None,
-                 reply_to: Optional['CommentEntity'] = None,
-                 repository: Optional['ICommentRepository'] = None,
-                 user_service: Optional[IUserService] = None,
-                 tweet_service: Optional[ITweetService] = None,
-                 created_at: datetime = datetime.now(),
-                 updated_at: datetime = datetime.now(),
-                 ):
+    def __init__(
+        self,
+        content: str,
+        user_id,
+        tweet_id: UUID,
+        comment_id: UUID = UUID(),
+        reply_to_id: Optional[UUID] = None,
+        user=None,
+        tweet=None,
+        replies_to_me: Optional[List["CommentEntity"]] = None,
+        reply_to: Optional["CommentEntity"] = None,
+        repository: Optional["ICommentRepository"] = None,
+        user_service: Optional[IUserService] = None,
+        tweet_service: Optional[ITweetService] = None,
+        created_at: datetime = datetime.now(),
+        updated_at: datetime = datetime.now(),
+    ):
         """CommentEntity constructor."""
         self.id = comment_id
         self.content = content

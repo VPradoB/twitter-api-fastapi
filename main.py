@@ -14,21 +14,19 @@ app = FastAPI()
 
 # the logger is configured here
 configure_logger(
-    logger_name=os.getenv('LOGGER_NAME'),
-    logger_host=os.getenv('LOGGER_HOST'),
-    logger_port=int(os.getenv('LOGGER_PORT'))
+    logger_name=os.getenv("LOGGER_NAME"),
+    logger_host=os.getenv("LOGGER_HOST"),
+    logger_port=int(os.getenv("LOGGER_PORT")),
 )
 
-Database.create_database_sqlite(
-    database_url=f'sqlite:///{os.getenv("DATABASE_URL")}'
-    )
+Database.create_database_sqlite(database_url=f'sqlite:///{os.getenv("DATABASE_URL")}')
 
 
 # This  is used to load all the routers from the src folder
 def include_routers(app: FastAPI):
-    path = 'src/*/infrastructure/router.py'
+    path = "src/*/infrastructure/router.py"
     for filename in glob.glob(path):
-        module = filename.replace('/', '.').replace('\\', '.')[:-3]
+        module = filename.replace("/", ".").replace("\\", ".")[:-3]
         router = importlib.import_module(module)
         app.include_router(router.router, prefix=f'/{module.split(".")[1]}')
 

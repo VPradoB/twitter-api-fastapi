@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
 router = APIRouter()
-router.tags = ['Tweets']
+router.tags = ["Tweets"]
 
 
-@router.get('/')
+@router.get("/")
 def index():
     pass
