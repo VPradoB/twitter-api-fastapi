@@ -3,13 +3,14 @@ import os
 
 from src.users.application.dto import RegisterUserDto
 from src.users.application.jwt_manager import create_token
-from src.users.domain.user_entity import UserEntity, IUserRepository
+from src.users.domain.user_entity import UserEntity
+from src.users.domain.user_repository import UserRepository
 
 logger = logging.getLogger(os.getenv("LOGGER_NAME"))
 
 
 class SignInUserUserCase:
-    def __init__(self, user_repository: IUserRepository):
+    def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
     def execute(self, new_user: RegisterUserDto):

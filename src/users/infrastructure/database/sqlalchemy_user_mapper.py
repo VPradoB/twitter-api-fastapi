@@ -1,10 +1,11 @@
-from src.users.domain.user_entity import UserEntity, IUserRepository
+from src.users.domain.user_entity import UserEntity
+from src.users.domain.user_repository import UserRepository
 from src.users.infrastructure.database.user_table import UserInDB
 
 
 class UserMapper:
     @classmethod
-    def to_entity(cls, user: UserInDB, repository: IUserRepository) -> UserEntity:
+    def to_entity(cls, user: UserInDB, repository: UserRepository) -> UserEntity:
         return UserEntity(
             id=user.id,
             email=user.email,

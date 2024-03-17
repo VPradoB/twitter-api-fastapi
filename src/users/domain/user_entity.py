@@ -1,50 +1,15 @@
-import abc
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Union
 
 from src.shared.domain.entity import IEntity
-from src.shared.domain.repositories import IRepository
-from src.shared.domain.services import ITweetService
-
-
-class IUserRepository(IRepository):
-    """Abstract class for user repositories."""
-
-    @abc.abstractmethod
-    def get_by_email(self, email):
-        pass
-
-    @abc.abstractmethod
-    def get_followers(self, user_id):
-        pass
-
-    @abc.abstractmethod
-    def get_followed(self, user_id):
-        pass
-
-    @abc.abstractmethod
-    def get_profile_picture(self, user_id):
-        pass
-
-    @abc.abstractmethod
-    def get_by_id(self, id):
-        pass
-
-    @abc.abstractmethod
-    def get_all(self):
-        pass
-
-    @abc.abstractmethod
-    def follow(self, follower_id: str, followed_id: str):
-        pass
 
 
 @dataclass(
     slots=True
 )  # using slots to improve performance, but it's not compatible with inheritance
-class UserEntity(IEntity):
+class UserEntity:
     """UserInDB Entity."""
 
     email: str
@@ -64,7 +29,6 @@ class UserEntity(IEntity):
     created_at: datetime = field(default_factory=datetime.now, repr=False)
     updated_at: datetime = field(default_factory=datetime.now, repr=False)
 
-    repository: IUserRepository | None = None
 
     def verify_username_availability(self) -> str:
         """Verify if there is no other user with the same username. If there is, raise an exception"""
@@ -73,18 +37,6 @@ class UserEntity(IEntity):
     def verify_email_availability(self) -> str:
         """Verify if there is no other user with the same email. If there is, raise an exception"""
         return self.email
-
-    def get_followers(self):
-        return self.repository.get_followers(self.id)
-
-    def get_following(self):
-        return self.repository.get_following(self.id)
-
-    def get_profile_picture(self):
-        return self.repository.get_profile_picture(self.profile_picture)
-
-    def save(self):
-        return self.repository.save(self)
 
     def follow(self, user: Union["UserEntity", str]) -> "UserEntity":
         """Follows a user.

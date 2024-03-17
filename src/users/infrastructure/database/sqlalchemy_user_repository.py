@@ -2,12 +2,13 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from src.users.domain.user_entity import IUserRepository, UserEntity
+from src.users.domain.user_entity import UserEntity
+from src.users.domain.user_repository import UserRepository
 from src.shared.infrastructure.database import Database
 from src.users.infrastructure.database.sqlalchemy_user_mapper import UserMapper
 
 
-class SqlAlchemyUserRepository(IUserRepository):
+class SqlAlchemyUserRepository(UserRepository):
     """UserEntity repository."""
 
     def get(self, id):
