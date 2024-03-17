@@ -23,3 +23,9 @@ class Filters:
                 for f in filters
             ]
         )
+
+    def to_primitives(self) -> list[FiltersPrimitives]:
+        return [
+            {"field": f.field.value, "operator": f.operator.value, "value": f.value.value}
+            for f in self.filters
+        ]
