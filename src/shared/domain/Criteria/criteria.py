@@ -18,11 +18,13 @@ class Criteria:
     @classmethod
     def from_primitives(
         cls,
-        criteria_primitives: CriteriaPrimitives,
+        filters: list[FiltersPrimitives],
+        order_by: str,
+        order_type: str,
     ) -> "Criteria":
         return Criteria(
-            filters=Filters.from_primitives(criteria_primitives.get("filters")),
-            order=Order.from_primitives(criteria_primitives.get("order_by"), criteria_primitives.get("order_type")),
+            filters=Filters.from_primitives(filters),
+            order=Order.from_primitives(order_by, order_type),
         )
 
     def to_primitives(self) -> "CriteriaPrimitives":
@@ -31,3 +33,10 @@ class Criteria:
             "order_by": self.order.order_by.value,
             "order_type": self.order.order_type.value,
         }
+
+    @staticmethod
+    def none() -> "Criteria":
+        return Criteria(
+            filters=Filters.none(),
+            order=Order.none(),
+        )

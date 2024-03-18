@@ -29,3 +29,7 @@ class Filters:
             {"field": f.field.value, "operator": f.operator.value, "value": f.value.value}
             for f in self.filters
         ]
+
+    @staticmethod
+    def none() -> "Filters":
+        return Filters(filters=[])
